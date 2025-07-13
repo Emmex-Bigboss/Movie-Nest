@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="shortcut icon" href="../Dashboard/Media/image-48rB6YJFWt.png" type="image/x-icon">
+  <link rel="stylesheet" href="./comment.css">
+</head>
+<body style="background-color: rgb(0, 0, 0);">
+
+  <div id="backdrop" class="backdrop-section"></div>
+
+  <div class="container my-4">
+    <div class="row">
+      <div class="col-md-4">
+        <img id="poster" class="poster img-fluid rounded" src="" alt="Poster">
+      </div>
+      <div class="col-md-8 text-white">
+        <h2 id="title" style="color: red !important; font-size: 40px;" class="fw-bold"></h2>
+        <p id="overview" style="color: white !important;"></p>
+
+        <p><strong>Genres:</strong> <span id="genres" class="text-light"></span></p>
+        <p><strong>Release Date:</strong> <span id="release-date" class="text-light"></span></p>
+        <p><strong>Rating:</strong> <span id="rating" class="text-light"></span></p>
+
+        <button id="trailer-btn" class="btn btn-danger mb-3" style="display: none;">Watch Trailer</button>
+
+        <h4 class="mt-4" style="color: white !important;">Top Cast</h4>
+        <ul id="cast-list" class="list-unstyled"></ul>
+      </div>
+    </div>
+
+    <div class="mt-5">
+  <h4 style="color: white !important;">Comments</h4>
+  
+  <form id="comment-form" class="mb-4">
+    <div class="mb-3">
+      <textarea
+        id="comment-input"
+        style="background-color: black; color: white;"
+        class="form-control"
+        rows="3"
+        placeholder="Write your comment..."
+        required
+      ></textarea>
+    </div>
+
+    <div class="mb-3">
+      <select
+        id="star-rating"
+        class="form-select"
+        style="background-color: black; color: white;"
+        required
+      >
+        <option value="">Rate this movie</option>
+        <option style="color: yellow;" value="5">★★★★★ - Excellent</option>
+        <option style="color: yellow;" value="4">★★★★ - Good</option>
+        <option style="color: yellow" value="3">★★★ - Average</option>
+        <option  style="color: red;"value="2">★★ - Poor</option>
+        <option style="color: red;" value="1">★ - Terrible</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-danger">Post Comment</button>
+  </form>
+
+  <div id="comments-container" class="bg-light p-3 rounded" style="max-height: 300px; overflow-y: auto; background-color: black !important; color: white;">
+    <div id="comment-list"></div>
+
+    <!-- User comments will appear here -->
+  </div>
+</div>
+
+
+
+
+
+  <!-- Trailer Modal -->
+  <div class="modal fade" id="trailerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content bg-dark">
+        <div class="modal-header border-0">
+          <h5 class="modal-title text-white">Watch Trailer</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="ratio ratio-16x9">
+            <iframe id="trailerIframe" src="" title="Trailer" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./comment.js"></script>
+  <script src="./usercomment.js" type="module"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
+</html>
