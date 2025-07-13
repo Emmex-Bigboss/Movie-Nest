@@ -144,9 +144,8 @@ const handleSignup = async () => {
       errorMessageEl.style.color = "red";
 
       alert("Sign up sucessful")
-      setTimeout(() => {
-        location.href = "./Dashboard/dashboard.html";
-      }, 2000);
+         location.href = "./Dashboard/dashboard.html";
+      
 
     } catch (verifyError) {
       console.error("Failed to send verification email:", verifyError);
