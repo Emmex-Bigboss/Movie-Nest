@@ -54,7 +54,13 @@ window.addEventListener("scroll", () => {
 });
 
 
-// Firebase Config and Setup
+
+
+
+
+
+
+
 import {
   getFirestore,
   collection,
@@ -143,7 +149,7 @@ const handleSignup = async () => {
       errorMessageEl.textContent = "Signup successful! Verification email sent.";
       errorMessageEl.style.color = "red";
 
-      alert("Sign up sucessful")
+     
          location.href = "./Dashboard/dashboard.html";
       
 
@@ -200,7 +206,7 @@ const signIn = async () => {
     const user = userCredential.user;
 
     if (user) {
-      alert("Welcome");
+     
       window.location.href = "./Dashboard/dashboard.html";
     }
   } catch (error) {
@@ -226,3 +232,22 @@ signInFormEl.addEventListener("submit", (e) => {
   e.preventDefault();
   signIn();
 });
+
+
+ 
+document.addEventListener("DOMContentLoaded", () => {
+  const passwordInput = document.getElementById("password1");
+  const passwordInput1 = document.getElementById("password");
+  const toggleIcon = document.getElementById("toggle-eye");
+  const toggleIcon1 = document.getElementById("toggle-eye2");
+
+  toggleIcon.addEventListener("click", () => {
+    passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+  });
+
+  toggleIcon1.addEventListener("click", () => {
+    passwordInput1.type = passwordInput1.type === "password" ? "text" : "password";
+  });
+  
+});
+
