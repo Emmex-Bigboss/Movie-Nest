@@ -1,8 +1,4 @@
 
-
-
-
-
 const apiKey = "2e249fd25cbc54d05736ba7a92ab8e16";
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get("id");
@@ -44,15 +40,9 @@ async function fetchDetails() {
       : "https://via.placeholder.com/500x750?text=No+Image";
     poster.alt = title;
 
-    
     genresEl.textContent = data.genres?.map(g => g.name).join(", ") || "No genres";
-
-   
     releaseDateEl.textContent = data.release_date || data.first_air_date || "N/A";
-
-   
     ratingEl.textContent = data.vote_average ? `${data.vote_average.toFixed(1)} / 10` : "Not Rated";
-
   } catch (err) {
     console.error("Failed to fetch details:", err);
     titleEl.textContent = "Failed to load details.";
@@ -76,6 +66,11 @@ async function fetchCast() {
       const li = document.createElement("li");
       li.className = "d-flex align-items-start gap-3 mb-3";
 
+      const link = document.createElement("a");
+      link.href = `./cast.html?id=${actor.id}`;
+      link.className = "d-flex text-decoration-none text-light";
+      link.style.gap = "15px";
+
       const img = document.createElement("img");
       img.src = actor.profile_path
         ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
@@ -85,10 +80,14 @@ async function fetchCast() {
       img.classList.add("rounded");
 
       const info = document.createElement("div");
-      info.innerHTML = `<strong>${actor.name}</strong><br><small>as <em>${actor.character || "N/A"}</em></small>`;
+      info.innerHTML = `
+        <strong>${actor.name}</strong><br>
+        <small>as <em>${actor.character || "N/A"}</em></small>
+      `;
 
-      li.appendChild(img);
-      li.appendChild(info);
+      link.appendChild(img);
+      link.appendChild(info);
+      li.appendChild(link);
       castList.appendChild(li);
     });
   } catch (err) {
@@ -122,3 +121,4 @@ async function fetchTrailer() {
     trailerBtn.style.display = "none";
   }
 }
+

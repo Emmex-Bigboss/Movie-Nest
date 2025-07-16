@@ -1,0 +1,56 @@
+.card{
+background-color: black;
+} 
+.card-body{
+background-color: black;
+
+}
+.card-body h6{
+color: white;
+}
+
+
+
+#suggestions {
+  background-color: white;
+  color: black;
+ position: absolute;         
+  width: 95%;               
+  z-index: 3;
+  right: 1px;                
+  top: 100%;                
+  max-height: 300px;        
+  overflow-y: auto;          
+  padding-left: 3em;
+  line-height: 2em;
+  border-radius: 0 0 5px 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+#suggestions .list-group-item:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+
+.suggestions-box a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  color: #000;
+  text-decoration: none;
+}
+
+.suggestions-box a:hover {
+  background-color: #f8f9fa;
+}
+
+.suggestions-box img {
+  width: 40px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+

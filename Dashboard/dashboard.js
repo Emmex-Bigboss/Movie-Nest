@@ -116,7 +116,7 @@ const toplink = document.getElementById("comets4");
 const lastFetch = localStorage.getItem('lastTopTrendingFetch');
 const now = new Date().getTime();
 
-if (!lastFetch || now - lastFetch > 86400000) { // 24 hours cache
+if (!lastFetch || now - lastFetch > 86400000) { 
   fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${apiKey}`)
     .then(res => res.json())
     .then(data => {
@@ -159,7 +159,6 @@ function showTopTrendingModal(movieId) {
       document.getElementById('topTrendingBackdrop').src = `https://image.tmdb.org/t/p/w780${movie.backdrop_path}`;
       topTrendingModalOverview.textContent = movie.overview;
 
-      // Set comment link with fixed type = 'movie'
       toplink.href = `./comment.html?id=${movie.id}&type=movie`;
       toplink.classList.remove("d-none");
 
@@ -242,7 +241,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalRelease = document.getElementById('upcomingRelease');
   const modalBackdrop = document.getElementById('upcomingBackdrop');
 
-  // Fetch movie genre names and return a map of ID to name
   async function fetchGenres() {
     try {
       const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}`);
@@ -257,7 +255,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Fetch upcoming movies and render them
   async function fetchUpcomingMovies() {
     try {
       const response = await fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${apiKey}`);
@@ -295,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Show movie info inside the modal
+ 
   function showUpcomingModal(movie, genreMap) {
     modalTitle.textContent = movie.title;
     modalOverview.textContent = movie.overview || 'No overview available.';
@@ -304,11 +301,11 @@ document.addEventListener('DOMContentLoaded', () => {
     modalBackdrop.src = `https://image.tmdb.org/t/p/original${movie.backdrop_path}`;
     modalBackdrop.alt = `${movie.title} backdrop`;
 
-    // Link to comment page (with type fixed as 'movie')
+    
     newlink2.href = `./comment.html?id=${movie.id}&type=movie`;
     newlink2.classList.remove("d-none");
 
-    // Fetch trailer
+  
     fetch(`https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=${apiKey}`)
       .then(response => response.json())
       .then(data => {
@@ -518,7 +515,6 @@ const nollyTrailerBtn = document.getElementById('nollyTrailerBtn');
 const nollylink = document.getElementById("cometsng");
 const nollyBackdrop = document.getElementById('nollyBackdrop');
 
-// Fetch Nigerian movies
 async function fetchNollyMovies() {
   const url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_origin_country=NG&sort_by=popularity.desc`;
   const res = await fetch(url);
@@ -527,7 +523,6 @@ async function fetchNollyMovies() {
   displayNollyMovies(movies);
 }
 
-// Fetch movie genres and create a map
 async function fetchNollyGenres() {
   const url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}`;
   const res = await fetch(url);
@@ -538,7 +533,6 @@ async function fetchNollyGenres() {
   }, {});
 }
 
-// Fetch trailer video
 async function fetchNollyTrailer(movieId) {
   const url = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}`;
   const res = await fetch(url);
@@ -549,7 +543,6 @@ async function fetchNollyTrailer(movieId) {
   return trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : null;
 }
 
-// Display movie cards
 async function displayNollyMovies(movies) {
   const genreMap = await fetchNollyGenres();
 
@@ -568,7 +561,6 @@ async function displayNollyMovies(movies) {
     title.textContent = movie.title;
     card.appendChild(title);
 
-    // Handle modal opening
     card.addEventListener('click', async () => {
       nollyTitle.textContent = movie.title;
       nollyOverview.textContent = movie.overview || 'No overview available.';
@@ -576,12 +568,10 @@ async function displayNollyMovies(movies) {
       nollyReleaseDate.textContent = movie.release_date || 'Unknown';
       nollyGenres.textContent = movie.genre_ids.map(id => genreMap[id]).join(', ') || 'Unknown';
 
-      // Set backdrop image
       nollyBackdrop.src = movie.backdrop_path
         ? `https://image.tmdb.org/t/p/w780${movie.backdrop_path}`
         : 'https://via.placeholder.com/780x250?text=No+Backdrop';
 
-      // Trailer button
       const trailerLink = await fetchNollyTrailer(movie.id);
       if (trailerLink) {
         nollyTrailerBtn.href = trailerLink;
@@ -635,7 +625,6 @@ fetchNollyMovies();
   const kdramaBackdrop = document.getElementById('kdramaBackdrop');
   const kdlink = document.getElementById("cometskd");
 
-  // Fetch K-Dramas
   async function fetchKdramas() {
     const url = `https://api.themoviedb.org/3/discover/tv?api_key=${kdramaApiKey}&with_origin_country=KR&with_genres=18&sort_by=popularity.desc`;
     const res = await fetch(url);
@@ -654,7 +643,6 @@ fetchNollyMovies();
     }, {});
   }
 
-  // Fetch K-Drama trailer
   async function fetchKdramaTrailer(tvId) {
     const url = `https://api.themoviedb.org/3/tv/${tvId}/videos?api_key=${kdramaApiKey}`;
     const res = await fetch(url);
@@ -665,7 +653,6 @@ fetchNollyMovies();
     return trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : null;
   }
 
-  // Display K-Drama Cards
   async function displayKdramas(kdramas) {
     const genreMap = await fetchKdramaGenres();
 
