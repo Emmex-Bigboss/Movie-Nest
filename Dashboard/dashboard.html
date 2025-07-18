@@ -4,22 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard</title>
-      <link rel="shortcut icon" href="./Media/image-48rB6YJFWt.png" type="image/x-icon">
-    
+    <link
+      rel="shortcut icon"
+      href="./Media/image-48rB6YJFWt.png"
+      type="image/x-icon"
+    />
+
     <link rel="stylesheet" href="./dashboard.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Bitcount+Grid+Double:wght@100..900&family=Dancing+Script:wght@400..700&family=Playwrite+IN:wght@100..400&display=swap"
-      rel="stylesheet"/>
+      rel="stylesheet"
+    />
 
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
-      crossorigin="anonymous"/>
-     
-
+      crossorigin="anonymous"
+    />
   </head>
   <body style="background-color: black">
     <header>
@@ -132,35 +136,38 @@
                   <li>
                     <a class="dropdown-item" href="#">API for Business</a>
                   </li>
-                  <li style="margin-left: 1em;">
+                  <li style="margin-left: 1em">
                     <button type="button" id="logoutbtn">
-  Log Out <img src="./Media/icons8-logout-48.png"   width="20%"    alt="">
-</button> 
+                      Log Out
+                      <img
+                        src="./Media/icons8-logout-48.png"
+                        width="20%"
+                        alt=""
+                      />
+                    </button>
                   </li>
                 </ul>
               </li>
             </ul>
 
             <form class="d-flex" role="search" onsubmit="return false;">
-  <input
-    class="form-control me-2"
-    type="text"
-    id="searchInput"
-    placeholder="Search"
-    aria-label="Search"
-  />
- <div id="suggestions" class="suggestions-box" ></div>
+              <input
+                class="form-control me-2"
+                type="text"
+                id="searchInput"
+                placeholder="Search"
+                aria-label="Search"
+              />
+              <div id="suggestions" class="suggestions-box"></div>
 
-  <button
-    class="btn btn-outline-light"
-    type="button"
-    id="searchBtn"
-  >
-    Search
-  </button>
-</form>
-
-
+              <button
+                class="btn btn-outline-light"
+                type="button"
+                id="searchBtn"
+              >
+                Search
+              </button>
+            </form>
           </div>
           <div class="avatar" style="margin-right: 3em" id="avatarid2">
             <a class="nav-item1" href="">
@@ -177,65 +184,42 @@
       </nav>
     </header>
 
-
-      <div id="results">
-  <div
-    class="modal fade"
-    id="resultsModal"
-    tabindex="-1"
-    aria-labelledby="resultsModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div style="background-color: white !important; color: black !important;" class="modal-content">
-        <div class="modal-header border-secondary">
-          <h5 class="modal-title" id="resultsModalLabel">Search Results</h5>
-          <button
-            type="button"
-            class="btn-close btn-close-white"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body" id="modalBody"></div>
-        <div class="modal-footer border-secondary">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-            Close
-          </button>
+    <div id="results">
+      <div
+        class="modal fade"
+        id="resultsModal"
+        tabindex="-1"
+        aria-labelledby="resultsModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+          <div
+            style="background-color: white !important; color: black !important"
+            class="modal-content"
+          >
+            <div class="modal-header border-secondary">
+              <h5 class="modal-title" id="resultsModalLabel">Search Results</h5>
+              <button
+                type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer border-secondary">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
 
     <div class="carosel">
       <div class="list">
@@ -244,7 +228,9 @@
           style="background-image: url(./Media/Ballerina\(2025\).webp)"
         >
           <div class="content">
-            <div class="title" style="color: red;font-size: 40px;">BALLERINA</div>
+            <div class="title" style="color: red; font-size: 40px">
+              BALLERINA
+            </div>
             <div class="name"></div>
             <div class="des">
               Taking place during the events of John Wick: Chapter 3 –
@@ -260,7 +246,7 @@
 
         <div
           class="item"
-          style="background-image: url(./Media/Head\ of\ states\(2025\).webp)"
+          style="background-image: url(./Media//Head\ of\ states\(2025\).webp)"
         >
           <div class="content">
             <div
@@ -271,8 +257,15 @@
               Z-O-M-B-I-E-S 4: Dawn of the Vampires (2025)
             </div>
             <div class="name"></div>
-            <div style="font-size: large;" class="des">
-             A new adventure dawns for Zed and Addison when their summer road trip takes an unexpected detour, landing them in the middle of yet another monster rivalry: Daywalkers vs. Vampires. Tensions flare when Zed and Addison find themselves acting as camp counselors between the two opposing supernatural factions. With the help of Eliza and Willa, they must convince sworn enemies Nova and Victor to try to unite their warring worlds before an even greater threat endangers them all.
+            <div style="font-size: large" class="des">
+              A new adventure dawns for Zed and Addison when their summer road
+              trip takes an unexpected detour, landing them in the middle of yet
+              another monster rivalry: Daywalkers vs. Vampires. Tensions flare
+              when Zed and Addison find themselves acting as camp counselors
+              between the two opposing supernatural factions. With the help of
+              Eliza and Willa, they must convince sworn enemies Nova and Victor
+              to try to unite their warring worlds before an even greater threat
+              endangers them all.
             </div>
             <div class="btun">
               <button>See More</button>
@@ -283,10 +276,12 @@
 
         <div
           class="item"
-            style="background-image: url(./Media/Iron\ Heart\(2025\).webp)"
+          style="background-image: url(./Media/Iron\ Heart\(2025\).webp)"
         >
           <div class="content">
-            <div id="thunder" class="title" style="color: red; font-size: 40px; ">Ironheart</div>
+            <div id="thunder" class="title" style="color: red; font-size: 40px">
+              Ironheart
+            </div>
             <!-- <div class="name">CROW</div> -->
             <div class="des">
               After the events of Black Panther: Wakanda Forever, technology is
@@ -347,8 +342,8 @@
           style="background-image: url(./Media/Squid\ game\(2025\).webp)"
         >
           <div class="content">
-            <div class="title" style="color: red; font-size: 50px;" >SQUID</div>
-            <div style="font-size: 40px;" class="name">Game</div>
+            <div class="title" style="color: red; font-size: 50px">SQUID</div>
+            <div style="font-size: 40px" class="name">Game</div>
             <div class="des">
               Hundreds of cash-strapped players accept a strange invitation to
               compete in children's games. Inside, a tempting prize awaits —
@@ -366,8 +361,10 @@
           style="background-image: url(./Media/Stranger\ Things.webp)"
         >
           <div class="content">
-            <div class="title" style="color: red;font-size: 50px;">Stranger</div>
-            <div style="font-family: 40px;" class="name">Things</div>
+            <div class="title" style="color: red; font-size: 50px">
+              Stranger
+            </div>
+            <div style="font-family: 40px" class="name">Things</div>
             <div class="des">
               When a young boy vanishes, a small town uncovers a mystery
               involving secret experiments, terrifying supernatural forces, and
@@ -411,7 +408,7 @@
           style="background-image: url(./Media/Thunderbolt\(2025\).webp)"
         >
           <div class="content">
-            <div id="thunder" class="title" style="color: red; font-size: 40px;">
+            <div id="thunder" class="title" style="color: red; font-size: 40px">
               Thunderbolts*
             </div>
             <!-- <div class="name">HERON</div> -->
@@ -432,7 +429,9 @@
           style="background-image: url(./Media/Bidgertons.webp)"
         >
           <div class="content">
-            <div id="thunder" class="title" style="color: red;font-size: 40px;">Bridgerton</div>
+            <div id="thunder" class="title" style="color: red; font-size: 40px">
+              Bridgerton
+            </div>
             <!-- <div class="name">BUTTERFLY</div> -->
             <div class="des">
               Wealth, lust, and betrayal set in the backdrop of Regency era
@@ -478,296 +477,103 @@
       <div class="blur-bg"></div>
       <!-- This is only for the blurred background -->
 
-
       <div class="content-t">
+
         <h2 class="trending" id="trend">Trending Movies🍿</h2>
         <div class="scroll-trending" id="movie-container"></div>
 
-
         <h2 class="sitcom" id="trend">Popular Sitcoms</h2>
-  <div class="sitcom-scroll" id="sitcom-container"></div>
+        <div class="sitcom-scroll" id="sitcom-container"></div>
 
-
-
-        <h2 class="teen-heading"  id="trend">Cartoon🍿</h2>
-  <div class="scroll-teen" id="teen-container"></div>
+        <h2 class="teen-heading" id="trend">Cartoon🍿</h2>
+        <div class="scroll-teen" id="teen-container"></div>
+        
+        <h2 class="trending nick-heading" id="trend">Nickelodeon Shows 📺</h2>
+<div class="scroll-trendingnick-scroll"id="nickelodeon-container"></div>
 
 
 
         <h2 class="adultteen-heading" id="trend">Teen Series</h2>
-  <div class="scroll-adultteen" id="adultteen-container"></div>
+        <div class="scroll-adultteen" id="adultteen-container"></div>
 
-         <h2 class="trending1" id="trend">Trending TV Shows🍿</h2> 
-          <div class="scroll-trending1" id="tv-container"></div>
-
-
-     <div class="trending-section">
-  <h2 class="section-heading" id="trend">Top Rated🍿</h2>
-  <div class="trending-scroll" id="topmovie-container"></div>
+        <h2 class="trending1" id="trend">Trending TV Shows🍿</h2>
+        <div class="scroll-trending1" id="tv-container"></div>
 
 
+        <h2 class="Upcoming" id="trend">Upcoming Movies🍿</h2>
+        <div class="Upcoming-trending" id="Upcoming"></div>
 
-
-</div>
-
-
-   
- 
-   
-
-
-
-
-
-
-      
-
-
-      <div class="content-t1">
-  <h2 class="Upcoming" id="trend">Upcoming Movies🍿</h2>
-  <div class="Upcoming-trending" id="Upcoming"></div>
-
-
+        <h2 class="section-heading" id="trend">Top Rated🍿</h2>
+        <div class="trending-scroll" id="topmovie-container"></div>
 
         
-
-
-
-
-</div>
-
-
-
-
-   
-
-
-
-
-        <section class="section">
-          
-         
-         
-        </section>
-
-       
-
-
-
-
-          <h2 id="trend">🇳🇬 Trending Nigerian Movies🍿</h2>
+        <h2 id="trend">🇳🇬 Trending Nigerian Movies🍿</h2>
         <div class="nolly-scroll" id="nolly-movies"></div>
 
-       
-    <h2 id="trend" >🇰🇷 Trending K-Dramas</h2>
-    <div class="kdrama-scroll" id="kdrama-container"></div>
-  
-    
+        <h2 id="trend">🇰🇷 Trending K-Dramas</h2>
+        <div class="kdrama-scroll" id="kdrama-container"></div>
 
-
-
-
-        <h2 class="section-title" id="trend"> 🍿Latest Movie Trailers</h2>
+        <h2 class="section-title" id="trend">🍿Latest Movie Trailers</h2>
         <div id="trailer-container" class="scroll-container"></div>
       </div>
-
-      
     </section>
 
 
 
-<!-- Sitcom Modal -->
-<div class="modal fade" id="sitcomModal" tabindex="-1" aria-hidden="true">
-   <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content">
-      <img class="sitcom-modal-backdrop" id="sitcomBackdrop" />
-      <div class="modal-body">
-        <h5 id="sitcomTitle"></h5>
-        <p><strong>Overview:</strong> <span id="sitcomOverview"></span></p>
-        <p><strong>Rating:</strong> <span id="sitcomRating"></span></p>
-        <p><strong>Genres:</strong> <span id="sitcomGenres"></span></p>
-        <p><strong>First Air Date:</strong> <span id="sitcomFirstAirDate"></span></p>
-        <a href="#" class="btn btn-danger mt-2" id="sitcomTrailerBtn" target="_blank">Watch Trailer</a>
 
 
-         <div class="comments">
-              <a id="cometssit" href="#">Read more and comments</a>
-            </div>
-
-
-      </div>
-    </div>
-  </div>
-</div>
-
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- Adult Teen Series Modal -->
-<div class="modal fade" id="adultteenModal" tabindex="-1">
-   <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content bg-light text-dark">
-      <img id="adultteenBackdrop" class="modal-backdrop-img" src="" alt="Backdrop" />
-      <div class="modal-body">
-        <h5 id="adultteenTitle" class="fw-bold"></h5>
-        <p id="adultteenOverview" class="small"></p>
-        <p><strong>Genres:</strong> <span id="adultteenGenres"></span></p>
-        <p><strong>First Air Date:</strong> <span id="adultteenFirstAirDate"></span></p>
-        <p><strong>Rating:</strong> <span id="adultteenRating"></span></p>
-        <a href="#" target="_blank" id="adultteenTrailerBtn" class="btn btn-danger">Watch Trailer</a>
-
-         <div class="comments">
-              <a id="cometateen" href="#">Read more and comments</a>
-            </div>
-
-
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-      <!-- Teen Series Modal -->
-<div class="modal fade" id="teenModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content bg-light text-dark">
-      <img id="teenBackdrop" class="modal-backdrop-img" src="" alt="Backdrop" />
-      <div class="modal-body">
-        <h5 id="teenTitle" class="fw-bold"></h5>
-        <p id="teenOverview" class="small"></p>
-        <p><strong>Genres:</strong> <span id="teenGenres"></span></p>
-        <p><strong>First Air Date:</strong> <span id="teenFirstAirDate"></span></p>
-        <p><strong>Rating:</strong> <span id="teenRating"></span></p>
-        <a href="#" target="_blank" id="teenTrailerBtn" class="btn btn-danger">Watch Trailer</a>
-
-         <div class="comments">
-              <a id="cometteen" href="#">Read more and comments</a>
-            </div>
-
-
-
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- <div class="modal fade" id="kdramaModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content bg-white text-dark">
-        <img id="kdramaBackdrop" class="kdrama-modal-backdrop" alt="Backdrop" />
-        <div class="modal-header border-0">
-          <h5 class="modal-title" id="kdramaTitle"></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <p id="kdramaOverview"></p>
-          <p><strong>First Air Date:</strong> <span id="kdramaFirstAirDate"></span></p>
-          <p><strong>Rating:</strong> <span id="kdramaRating"></span></p>
-          <p><strong>Genres:</strong> <span id="kdramaGenres"></span></p>
-          <a id="kdramaTrailerBtn" class="btn btn-danger mt-3" target="_blank" style="display: none;">
-             Watch Trailer
-          </a>
-          <div class="comments">
-              <a id="cometskd" href="#">Read more and comments</a>
-            </div>
-
-
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
-
-
-
-
-
- 
-
-
-     
-
-
-    <div class="modal fade" id="nollyModal" tabindex="-1">
+<!-- Nickelodeon Modal -->
+<div
+  class="modal fade"
+  id="nickModal"
+  tabindex="-1"
+  aria-labelledby="nickModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content bg-white text-dark">
-      <img id="nollyBackdrop" class="modal-backdrop-img" alt="Movie Backdrop" />
       <div class="modal-header border-0">
-        <h5 class="modal-title" id="nollyTitle"></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <h5 class="modal-title" id="nickModalLabel"></h5>
+        <button
+          type="button"
+          class="btn-close btn-close-dark"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
-        <p id="nollyOverview"></p>
-        <p><strong>Release Date:</strong> <span id="nollyReleaseDate"></span></p>
-        <p><strong>Rating:</strong> <span id="nollyRating"></span></p>
-        <p><strong>Genres:</strong> <span id="nollyGenres"></span></p>
-        <a id="nollyTrailerBtn" class="btn btn-danger mt-3" target="_blank" style="display: none;">
+        <div
+          id="nickBackdropWrapper"
+          class="mb-3"
+          style="background-size: cover; height: 200px; border-radius: 10px"
+        ></div>
+
+        <p>
+          <strong>First Air Date:</strong>
+          <span id="nickFirstAirDate" class="text-muted"></span>
+        </p>
+        <p>
+          <strong>Rating:</strong>
+          <span id="nickRating" class="text-warning fw-bold"></span>
+        </p>
+        <p>
+          <strong>Genres:</strong>
+          <span id="nickGenres" class="text-muted"></span>
+        </p>
+        <p id="nickOverview" class="small"></p>
+
+        <a
+          href="#"
+          target="_blank"
+          id="nickTrailerBtn"
+          class="btn btn-danger mt-2"
+        >
           Watch Trailer
         </a>
-        <div class="comments">
-              <a id="cometsng" href="#">Read more and comments</a>
-            </div>
 
+        <div class="comments mt-3">
+          <a id="cometsnick" href="#">Read more and comments</a>
+        </div>
       </div>
     </div>
   </div>
@@ -775,63 +581,305 @@
 
 
 
+    <!-- Sitcom Modal -->
+    <div
+      class="modal fade"
+      id="sitcomModal"
+      tabindex="-1"
+      aria-labelledby="sitcomModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content bg-white text-dark">
+          <div class="modal-header border-0">
+            <h5 class="modal-title" id="sitcomModalLabel"></h5>
+            <button
+              type="button"
+              class="btn-close btn-close-dark"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div
+              id="sitcomBackdropWrapper"
+              class="mb-3"
+              style="background-size: cover; height: 200px; border-radius: 10px"
+            ></div>
 
+            <p>
+              <strong>First Air Date:</strong>
+              <span id="sitcomFirstAirDate" class="text-muted"></span>
+            </p>
+            <p>
+              <strong>Rating:</strong>
+              <span id="sitcomRating" class="text-warning fw-bold"></span>
+            </p>
+            <p>
+              <strong>Genres:</strong>
+              <span id="sitcomGenres" class="text-muted"></span>
+            </p>
+            <p id="sitcomOverview"></p>
 
+            <a
+              href="#"
+              class="btn btn-danger mt-2"
+              id="sitcomTrailerBtn"
+              target="_blank"
+            >
+              Watch Trailer
+            </a>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="modal fade" id="topTrendingModal" tabindex="-1">
-   <div class="modal-dialog modal-dialog-scrollable">
-    <div style="background-color: white !important; color: black !important;" class="modal-content">
-      <div class="modal-header border-0">
-        <h5 class="modal-title" id="topTrendingModalTitle" >Movie Title</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body" style="background-color: white !important; color: black !important;">
-        <img id="topTrendingBackdrop" class="img-fluid rounded" alt="Backdrop" />
-
-        <p><strong>Genres:</strong> <span id="topTrendingModalGenres"></span></p>
-        <p><strong>Release Date:</strong> <span id="topTrendingModalDate"></span></p>
-        <p><strong>Rating:</strong> ⭐ <span id="topTrendingModalRating"></span></p>
-        <p><strong>Overview:</strong></p>
-        <p id="topTrendingModalOverview"></p>
-        <a id="topTrendingTrailerBtn" href="#" class="btn btn-danger mt-2" target="_blank">Watch Trailer</a>
-
-        <div class="comments">
-              <a id="comets4" href="#">Read more and comments</a>
+            <div class="comments mt-3">
+              <a id="cometssit" href="#">Read more and comments</a>
             </div>
-
-
-
-
-
+          </div>
+        </div>
       </div>
-
-
-      
     </div>
-  </div>
-</div>
 
+    <!-- Adult Teen Series Modal -->
+    <div
+      class="modal fade"
+      id="adultteenModal"
+      tabindex="-1"
+      aria-labelledby="adultteenModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content bg-white text-dark">
+          <div class="modal-header border-0">
+            <h5 class="modal-title" id="adultteenModalLabel"></h5>
+            <button
+              type="button"
+              class="btn-close btn-close-dark"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div
+              id="adultteenBackdropWrapper"
+              class="mb-3"
+              style="background-size: cover; height: 200px; border-radius: 10px"
+            ></div>
 
+            <p>
+              <strong>First Air Date:</strong>
+              <span id="adultteenFirstAirDate" class="text-muted"></span>
+            </p>
+            <p>
+              <strong>Rating:</strong>
+              <span id="adultteenRating" class="text-warning fw-bold"></span>
+            </p>
+            <p>
+              <strong>Genres:</strong>
+              <span id="adultteenGenres" class="text-muted"></span>
+            </p>
+            <p id="adultteenOverview" class="small"></p>
 
+            <a
+              href="#"
+              target="_blank"
+              id="adultteenTrailerBtn"
+              class="btn btn-danger mt-2"
+            >
+              Watch Trailer
+            </a>
 
+            <div class="comments mt-3">
+              <a id="cometateen" href="#">Read more and comments</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <!-- Teen Series Modal -->
+    <div
+      class="modal fade"
+      id="teenModal"
+      tabindex="-1"
+      aria-labelledby="teenModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content bg-white text-dark">
+          <div class="modal-header border-0">
+            <h5 class="modal-title" id="teenModalLabel"></h5>
+            <button
+              type="button"
+              class="btn-close btn-close-dark"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div
+              id="teenBackdropWrapper"
+              class="mb-3"
+              style="background-size: cover; height: 200px; border-radius: 10px"
+            ></div>
+
+            <p>
+              <strong>First Air Date:</strong>
+              <span id="teenFirstAirDate" class="text-muted"></span>
+            </p>
+            <p>
+              <strong>Rating:</strong>
+              <span id="teenRating" class="text-warning fw-bold"></span>
+            </p>
+            <p>
+              <strong>Genres:</strong>
+              <span id="teenGenres" class="text-muted"></span>
+            </p>
+            <p id="teenOverview" class="small"></p>
+
+            <a
+              href="#"
+              target="_blank"
+              id="teenTrailerBtn"
+              class="btn btn-danger mt-2"
+            >
+              Watch Trailer
+            </a>
+
+            <div class="comments mt-3">
+              <a id="cometteen" href="#">Read more and comments</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="kdramaModal"
+      tabindex="-1"
+      aria-labelledby="kdramaModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content bg-white text-dark">
+          <div class="modal-header border-0">
+            <h5 class="modal-title" id="kdramaModalLabel"></h5>
+            <button
+              type="button"
+              class="btn-close btn-close-dark"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div
+              id="kdramaBackdropWrapper"
+              class="mb-3"
+              style="
+                background-size: cover;
+                background-position: center;
+                height: 200px;
+                border-radius: 10px;
+              "
+            ></div>
+
+            <p>
+              <strong>First Air Date:</strong>
+              <span id="kdramaFirstAirDate" class="text-muted"></span>
+            </p>
+            <p>
+              <strong>Rating:</strong>
+              <span id="kdramaRating" class="text-warning fw-bold"></span>
+            </p>
+            <p>
+              <strong>Genres:</strong>
+              <span id="kdramaGenres" class="text-muted"></span>
+            </p>
+
+            <p id="kdramaOverview" class="small"></p>
+
+            <a
+              id="kdramaTrailerBtn"
+              class="btn btn-danger mt-2"
+              target="_blank"
+              href="#"
+              style="display: none"
+            >
+              Watch Trailer
+            </a>
+
+            <div class="comments mt-3">
+              <a id="cometskd" href="#" class="text-decoration-underline"
+                >Read more and comments</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="nollyModal"
+      tabindex="-1"
+      aria-labelledby="nollyModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content bg-white text-dark">
+          <div class="modal-header border-0">
+            <h5 class="modal-title" id="nollyModalLabel"></h5>
+            <button
+              type="button"
+              class="btn-close btn-close-dark"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div
+              id="nollyBackdropWrapper"
+              class="mb-3"
+              style="
+                background-size: cover;
+                background-position: center;
+                height: 200px;
+                border-radius: 10px;
+              "
+            ></div>
+
+            <p>
+              <strong>Release Date:</strong>
+              <span id="nollyReleaseDate" class="text-muted"></span>
+            </p>
+            <p>
+              <strong>Rating:</strong>
+              <span id="nollyRating" class="text-warning fw-bold"></span>
+            </p>
+            <p>
+              <strong>Genres:</strong>
+              <span id="nollyGenres" class="text-muted"></span>
+            </p>
+            <p id="nollyOverview" class="small"></p>
+
+            <a
+              href="#"
+              target="_blank"
+              id="nollyTrailerBtn"
+              class="btn btn-danger mt-2"
+              style="display: none"
+            >
+              Watch Trailer
+            </a>
+
+            <div class="comments mt-3">
+              <a id="cometsng" href="#" class="text-decoration-underline"
+                >Read more and comments</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div
       class="modal fade"
@@ -846,7 +894,7 @@
             <h5 class="modal-title" id="movieModalLabel"></h5>
             <button
               type="button"
-              class="btn-close btn-close-white"
+              class="btn-close btn-close-dark"
               data-bs-dismiss="modal"
               aria-label="Close"
             ></button>
@@ -886,68 +934,127 @@
       </div>
     </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="modal fade" id="upcomingModal" tabindex="-1">
-   <div class="modal-dialog modal-dialog-scrollable">
+    <div
+  class="modal fade"
+  id="topTrendingModal"
+  tabindex="-1"
+  aria-labelledby="topTrendingModalTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content bg-white text-dark">
-      
-      <img id="upcomingBackdrop" class="w-100 rounded-top" style="max-height: 300px; object-fit: cover;" alt="Backdrop Image">
-      
-      <div class="modal-header border-bottom">
-        <h5 class="modal-title" id="upcomingModalTitle"></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="topTrendingModalTitle">Movie Title</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
-      
       <div class="modal-body">
-        <p><strong>Genres:</strong> <span id="upcomingGenres"></span></p>
-        <p><strong>Release Date:</strong> <span id="upcomingRelease"></span></p>
-        <p id="upcomingOverview"></p>
+        
+       <div
+          id="topTrendingBackdrop"
+          class="mb-3"
+              style="background-size: cover; height: 200px; border-radius: 10px"
+        ></div>
 
+        <!-- Genres -->
+        <p>
+          <strong>Genres:</strong>
+          <span id="topTrendingModalGenres"></span>
+        </p>
 
-          <a
-              href="#"
-              id="upcomingtrailer"
-              class="btn btn-danger mt-2"
-              target="_blank"
-            >
-              Watch Trailer</a
-            >
+        <!-- Release Date -->
+        <p>
+          <strong>Release Date:</strong>
+          <span id="topTrendingModalDate">--</span>
+        </p>
 
-            <div class="comments">
-              <a id="comets2" href="#">Read more and comments</a>
-            </div>
+        <!-- Rating -->
+        <p>
+          <strong>Rating:</strong>
+          <span id="topTrendingModalRating">--</span>
+        </p>
 
+        <!-- Overview -->
+        <p><strong>Overview:</strong></p>
+        <p id="topTrendingModalOverview">--</p>
+
+        <!-- Trailer Button -->
+        <a
+          id="topTrendingTrailerBtn"
+          href="#"
+          target="_blank"
+          class="btn btn-danger mt-2 d-none"
+        >
+          Watch Trailer
+        </a>
+
+        <!-- Comments Link -->
+        <div class="comments mt-3">
+          <a id="comets4" href="#" class="text-decoration-underline d-none">
+            Read more and comments
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 
+    <div
+      class="modal fade"
+      id="upcomingModal"
+      tabindex="-1"
+      aria-labelledby="upcomingModalTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content bg-white text-dark">
+          <div class="modal-header border-0">
+            <h5 class="modal-title" id="upcomingModalTitle">Movie Title</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div
+              id="upcomingBackdropWrapper"
+              class="mb-3"
+              style="background-size: cover; height: 200px; border-radius: 10px"
+            ></div>
 
+            <p><strong>Genres:</strong> <span id="upcomingGenres"></span></p>
+            <p>
+              <strong>Release Date:</strong> <span id="upcomingRelease"></span>
+            </p>
+            <p><strong>Rating:</strong> ⭐ <span id="upcomingRating"></span></p>
+            <p><strong>Overview:</strong></p>
+            <p id="upcomingOverview"></p>
 
+            <a
+              href="#"
+              id="upcomingtrailer"
+              class="btn btn-danger mt-2 d-none"
+              target="_blank"
+            >
+              Watch Trailer
+            </a>
 
-
-
-
-
-
-
-
-
-
+            <div class="comments mt-3">
+              <a id="comets2" href="#" class="text-decoration-underline"
+                >Read more and comments</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div
       class="modal fade"
@@ -958,27 +1065,45 @@
     >
       <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content bg-white text-dark">
-          <div class="modal-body">
+          <div class="modal-header border-0">
             <h5 class="modal-title" id="tvModalLabel">TV Show Title</h5>
+            <button
+              type="button"
+              class="btn-close btn-close-dark"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div
+              id="tvBackdropWrapper"
+              class="mb-3"
+              style="background-size: cover; height: 200px; border-radius: 10px"
+            ></div>
 
-            
+            <p>
+              <strong>Overview:</strong>
+              <span id="tvOverview"></span>
+            </p>
+            <p>
+              <strong>First Air Date:</strong>
+              <span id="tvAirDate"></span>
+            </p>
+            <p>
+              <strong>Rating:</strong>
+              <span id="tvRating" class="text-warning fw-bold"></span>
+            </p>
 
-            <img id="tvBackdrop"class="img-fluid rounded" alt="Backdrop" />
-
-
-
-            <p><strong>Overview:</strong> <span id="tvOverview"></span></p>
-            <p><strong>First Air Date:</strong> <span id="tvAirDate"></span></p>
-            <p><strong>Rating:</strong> <span id="tvRating"></span></p>
             <a
               id="tvTrailerButton"
               href="#"
               target="_blank"
               class="btn btn-danger d-none mt-3"
             >
-              Watch Trailer</a
-            >
-            <div class="comments">
+              Watch Trailer
+            </a>
+
+            <div class="comments mt-3">
               <a id="comets1" href="#">Read more and comments</a>
             </div>
           </div>
@@ -986,24 +1111,13 @@
       </div>
     </div>
 
-   
-
-
-
-
-
-
-
-
-
-
-<!-- 
+    <!-- 
  <div class="modal fade" id="movieModal" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content bg-dark text-white">
         <div class="modal-header border-0">
           <h5 class="modal-title" id="movieTitle"></h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
           <p id="movieOverview"></p>
@@ -1020,24 +1134,6 @@
       </div>
     </div>
   </div> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     <footer class="footer">
       <div class="footer-container">
@@ -1142,8 +1238,6 @@
       </div>
     </footer>
 
-    
-    
     <script src="./dashboard.js" type="module"></script>
     <script src="./user.js" type="module"></script>
     <script
@@ -1151,6 +1245,5 @@
       integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
       crossorigin="anonymous"
     ></script>
-
   </body>
 </html>

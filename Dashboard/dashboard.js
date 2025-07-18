@@ -1,98 +1,91 @@
 const apiKey = '2e249fd25cbc54d05736ba7a92ab8e16'; 
-const container = document.getElementById('movie-container');
-const movieModal = new bootstrap.Modal(document.getElementById('movieModal'));
 
-const newlink = document.getElementById("comets");  
 
-let genreMap = {};
+(() => {
+  const KEY = '2e249fd25cbc54d05736ba7a92ab8e16';
+  const container = document.getElementById('movie-container');
+  const modal = new bootstrap.Modal(document.getElementById('movieModal'));
 
-async function fetchGenres() {
-  try {
-    const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}`);
-    const data = await res.json();
-    data.genres.forEach(genre => {
-      genreMap[genre.id] = genre.name;
-    });
-  } catch (error) {
-    console.error('Failed to fetch genres:', error);
+  const titleEl = document.getElementById('movieModalLabel');
+  const overviewEl = document.getElementById('modalOverview');
+  const ratingEl = document.getElementById('modalRating');
+  const genresEl = document.getElementById('modalGenres');
+  const dateEl = document.getElementById('modalReleaseDate');
+  const trailerBtn = document.getElementById('trailerButton');
+  const backdropWrapper = document.getElementById('modalBackdropWrapper');
+  const commentLink = document.getElementById('comets');
+
+  async function fetchGenres() {
+    const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${KEY}`);
+    const { genres } = await res.json();
+    return genres.reduce((map, genre) => {
+      map[genre.id] = genre.name;
+      return map;
+    }, {});
   }
-}
 
-async function fetchTrendingMovies() {
-  try {
-    const response = await fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}`);
-    const data = await response.json();
+  async function fetchTrailer(id) {
+    const res = await fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${KEY}`);
+    const { results } = await res.json();
+    const video = results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+    return video ? `https://www.youtube.com/watch?v=${video.key}` : null;
+  }
 
-    data.results.forEach(movie => {
+  async function fetchTrendingMovies() {
+    const url = `https://api.themoviedb.org/3/trending/movie/week?api_key=${KEY}`;
+    
+    const [genreMap, res] = await Promise.all([
+      fetchGenres(),
+      fetch(url).then(r => r.json())
+    ]);
+
+    if (!res.results?.length) return console.warn('No trending movies found.');
+
+    res.results.slice(0, 30).forEach(movie => {
       const card = document.createElement('div');
-      card.classList.add('movie-card', 'm-2');
-      card.style.cursor = 'pointer';
-
-      const img = document.createElement('img');
-      img.src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
-      img.alt = movie.title;
-      img.classList.add('img-fluid');
-
-      const title = document.createElement('div');
-      title.classList.add('movie-title', 'text-center', 'mt-2', 'fw-bold');
-      title.textContent = movie.title;
-
-      card.appendChild(img);
-      card.appendChild(title);
-      container.appendChild(card);
+      card.className = 'movie-card';  // Same as sitcom-card style
+      card.innerHTML = `
+        <img src="${movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 
+        'https://via.placeholder.com/180x270?text=No+Image'}">
+        <p class="movie-title">${movie.title}</p>
+      `;
 
       card.addEventListener('click', async () => {
-        document.getElementById('movieModalLabel').textContent = movie.title;
-        document.getElementById('modalOverview').textContent = movie.overview;
-        document.getElementById('modalReleaseDate').textContent = movie.release_date;
-        document.getElementById('modalBackdropWrapper').style.backgroundImage =
-          `url('https://image.tmdb.org/t/p/w780${movie.backdrop_path}')`;
+        titleEl.textContent = movie.title;
+        overviewEl.textContent = movie.overview || 'No overview available.';
+        ratingEl.textContent = `★ ${movie.vote_average?.toFixed(1) || '—'}`;
+        dateEl.textContent = movie.release_date || '—';
+        genresEl.textContent = movie.genre_ids.map(id => genreMap[id]).join(', ') || '—';
 
-        document.getElementById('modalRating').textContent = `★ ${movie.vote_average.toFixed(1)}`;
-
-        const genreText = movie.genre_ids.map(id => genreMap[id]).join(', ');
-        document.getElementById('modalGenres').textContent = genreText || 'Unknown';
-
-        const trailerButton = document.getElementById('trailerButton');
-        trailerButton.classList.add('d-none')
-        
-        
-        ;
-
-
-      
-
-        try {
-          const trailerRes = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=${apiKey}`);
-          const trailerData = await trailerRes.json();
-
-          const youtubeTrailer = trailerData.results.find(video =>
-            video.site === "YouTube" && video.type === "Trailer"
-          );
-
-          if (youtubeTrailer) {
-            trailerButton.href = `https://www.youtube.com/watch?v=${youtubeTrailer.key}`;
-            trailerButton.classList.remove('d-none');
-          }
-        } catch (trailerError) {
-          console.warn('No trailer found:', trailerError);
+        // Handle backdrop image
+        if (movie.backdrop_path) {
+          backdropWrapper.style.backgroundImage = `url(https://image.tmdb.org/t/p/w780${movie.backdrop_path})`;
+        } else {
+          backdropWrapper.style.backgroundImage = 'none';
         }
 
-       
-       newlink.href = `./comment.html?id=${movie.id}&type=${movie.media_type}`;
-newlink.classList.remove("d-none");
+        // Handle trailer button
+        const trailer = await fetchTrailer(movie.id);
+        if (trailer) {
+          trailerBtn.href = trailer;
+          trailerBtn.style.display = 'inline-block';
+        } else {
+          trailerBtn.style.display = 'none';
+        }
 
-        movieModal.show();
+        // Handle comment link
+        if (commentLink) {
+          commentLink.href = `./comment.html?id=${movie.id}&type=movie`;
+          commentLink.classList.remove('d-none');
+        }
+
+        modal.show();
       });
-    });
-  } catch (error) {
-    console.error('Failed to fetch trending movies:', error);
-    container.innerHTML = '<p>Oops! Something went wrong while loading movies.</p>';
-  }
-}
 
-(async function main() {
-  await fetchGenres();
+      container.appendChild(card);
+    });
+  }
+
   fetchTrendingMovies();
 })();
 
@@ -102,233 +95,161 @@ newlink.classList.remove("d-none");
 
 
 
-const movieContainer = document.getElementById('topmovie-container');
-
-const topTrendingModal = new bootstrap.Modal(document.getElementById('topTrendingModal'));
-const topTrendingModalTitle = document.getElementById('topTrendingModalTitle');
-const topTrendingModalGenres = document.getElementById('topTrendingModalGenres');
-const topTrendingModalDate = document.getElementById('topTrendingModalDate');
-const topTrendingModalRating = document.getElementById('topTrendingModalRating');
-const topTrendingModalOverview = document.getElementById('topTrendingModalOverview');
-const topTrendingTrailerBtn = document.getElementById('topTrendingTrailerBtn');
-const toplink = document.getElementById("comets4");
-
-const lastFetch = localStorage.getItem('lastTopTrendingFetch');
-const now = new Date().getTime();
-
-if (!lastFetch || now - lastFetch > 86400000) { 
-  fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${apiKey}`)
-    .then(res => res.json())
-    .then(data => {
-      localStorage.setItem('lastTopTrendingFetch', now);
-      localStorage.setItem('topTrendingMovies', JSON.stringify(data.results));
-      renderTopTrending(data.results);
-    })
-    .catch(err => console.error('Error fetching trending movies:', err));
-} else {
-  const cached = JSON.parse(localStorage.getItem('topTrendingMovies'));
-  renderTopTrending(cached);
-}
-
-function renderTopTrending(movies) {
-  movieContainer.innerHTML = '';
-  movies.forEach(movie => {
-    const card = document.createElement('div');
-    card.className = 'card text-white';
-    card.style.minWidth = '200px';
-    card.style.cursor = 'pointer';
-    card.innerHTML = `
-      <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" class="card-img-top" alt="${movie.title}">
-      <div class="card-body">
-        <h6 class="card-title">${movie.title}</h6>
-      </div>
-    `;
-    card.addEventListener('click', () => showTopTrendingModal(movie.id));
-    movieContainer.appendChild(card);
-  });
-}
-
-function showTopTrendingModal(movieId) {
-  fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}`)
-    .then(res => res.json())
-    .then(movie => {
-      topTrendingModalTitle.textContent = movie.title;
-      topTrendingModalGenres.textContent = movie.genres.map(g => g.name).join(', ');
-      topTrendingModalDate.textContent = movie.release_date;
-      topTrendingModalRating.textContent = movie.vote_average;
-      document.getElementById('topTrendingBackdrop').src = `https://image.tmdb.org/t/p/w780${movie.backdrop_path}`;
-      topTrendingModalOverview.textContent = movie.overview;
-
-      toplink.href = `./comment.html?id=${movie.id}&type=movie`;
-      toplink.classList.remove("d-none");
-
-      fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}`)
-        .then(res => res.json())
-        .then(data => {
-          const trailer = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-          topTrendingTrailerBtn.href = trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : '#';
-          topTrendingTrailerBtn.style.display = trailer ? 'inline-block' : 'none';
-        })
-        .catch(err => {
-          console.error('Error fetching trailer:', err);
-          topTrendingTrailerBtn.style.display = 'none';
-        });
-
-      topTrendingModal.show();
-    })
-    .catch(err => {
-      console.error('Error fetching movie details:', err);
-    });
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-document.addEventListener('DOMContentLoaded', () => {
+(() => {
   const apiKey = '2e249fd25cbc54d05736ba7a92ab8e16';
+  const container = document.getElementById('Upcoming');
+  const modal = new bootstrap.Modal(document.getElementById('upcomingModal'));
 
-  const upcomingContainer = document.getElementById('Upcoming');
-  const upcomingModal = new bootstrap.Modal(document.getElementById('upcomingModal'));
-  const upcomingTrailerLink = document.getElementById('upcomingtrailer');
-  const newlink2 = document.getElementById('comets2'); 
-
-  const modalTitle = document.getElementById('upcomingModalTitle');
-  const modalGenres = document.getElementById('upcomingGenres');
-  const modalOverview = document.getElementById('upcomingOverview');
-  const modalRelease = document.getElementById('upcomingRelease');
-  const modalBackdrop = document.getElementById('upcomingBackdrop');
+  const titleEl = document.getElementById('upcomingModalTitle');
+  const overviewEl = document.getElementById('upcomingOverview');
+  const dateEl = document.getElementById('upcomingRelease');
+  const ratingEl = document.getElementById('upcomingRating');
+  const genresEl = document.getElementById('upcomingGenres');
+  const trailerBtn = document.getElementById('upcomingtrailer');
+  const backdropEl = document.getElementById('upcomingBackdropWrapper');
+  const commentLink = document.getElementById('comets2');
 
   async function fetchGenres() {
     try {
       const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}`);
       const data = await res.json();
-      return data.genres.reduce((acc, genre) => {
-        acc[genre.id] = genre.name;
+      return data.genres.reduce((acc, g) => {
+        acc[g.id] = g.name;
         return acc;
       }, {});
-    } catch (error) {
-      console.error('Error fetching genres:', error);
+    } catch (err) {
+      console.error('Fetch genres error:', err);
       return {};
+    }
+  }
+
+  async function fetchTrailer(movieId) {
+    try {
+      const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}`);
+      const data = await res.json();
+      const vid = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+      return vid ? `https://www.youtube.com/watch?v=${vid.key}` : null;
+    } catch {
+      return null;
     }
   }
 
   async function fetchUpcomingMovies() {
     try {
-      const response = await fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${apiKey}`);
-      const data = await response.json();
-      const genreMap = await fetchGenres();
-
-      upcomingContainer.innerHTML = ''; // Clear old content
-
-      data.results.forEach(movie => {
-        const movieCard = document.createElement('div');
-        movieCard.classList.add('text-center');
-        movieCard.style.width = '150px';
-        movieCard.style.flex = '0 0 auto'; 
-
-        const img = document.createElement('img');
-        img.src = `https://image.tmdb.org/t/p/w200${movie.poster_path}`;
-        img.alt = movie.title;
-        img.classList.add('rounded');
-        img.style.cursor = 'pointer';
-        img.style.width = '100%';
-
-        const title = document.createElement('p');
-        title.textContent = movie.title;
-        title.classList.add('mt-2', 'fw-semibold', 'text-white'); 
-        title.style.fontSize = '0.85rem';
-
-        img.addEventListener('click', () => showUpcomingModal(movie, genreMap));
-
-        movieCard.appendChild(img);
-        movieCard.appendChild(title);
-        upcomingContainer.appendChild(movieCard);
-      });
-    } catch (error) {
-      console.error('Error fetching upcoming movies:', error);
+      const res = await fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${apiKey}`);
+      const data = await res.json();
+      if (!Array.isArray(data.results) || data.results.length === 0) {
+        console.warn('No upcoming movies found');
+        return;
+      }
+      const movies = data.results.slice(0, 20);
+      display(movies);
+    } catch (err) {
+      console.error('Fetch upcoming error:', err);
     }
   }
 
- 
-  function showUpcomingModal(movie, genreMap) {
-    modalTitle.textContent = movie.title;
-    modalOverview.textContent = movie.overview || 'No overview available.';
-    modalRelease.textContent = movie.release_date || 'Unknown';
-    modalGenres.textContent = movie.genre_ids.map(id => genreMap[id]).join(', ') || 'Unknown';
-    modalBackdrop.src = `https://image.tmdb.org/t/p/original${movie.backdrop_path}`;
-    modalBackdrop.alt = `${movie.title} backdrop`;
+  async function display(movies) {
+    const genres = await fetchGenres();
+    container.innerHTML = '';
 
-    
-    newlink2.href = `./comment.html?id=${movie.id}&type=movie`;
-    newlink2.classList.remove("d-none");
+    movies.forEach(movie => {
+      const card = document.createElement('div');
+      card.classList.add('text-center');
+      card.style.width = '150px';
+      card.style.flex = '0 0 auto';
 
-  
-    fetch(`https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=${apiKey}`)
-      .then(response => response.json())
-      .then(data => {
-        const trailer = data.results.find(video => video.type === 'Trailer' && video.site === 'YouTube');
-        if (trailer) {
-          upcomingTrailerLink.href = `https://www.youtube.com/watch?v=${trailer.key}`;
-          upcomingTrailerLink.classList.remove('disabled');
+      const img = document.createElement('img');
+      img.src = movie.poster_path
+        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+        : 'https://via.placeholder.com/150x225?text=No+Image';
+      img.alt = movie.title;
+      img.classList.add('rounded');
+      img.style.cursor = 'pointer';
+      img.style.width = '100%';
+
+      const p = document.createElement('p');
+         p.className = 'up-title';
+      p.textContent = movie.title;
+      p.classList.add('mt-2', 'fw-semibold', 'text-white');
+      p.style.fontSize = '0.85rem';
+
+      card.appendChild(img);
+      card.appendChild(p);
+
+      card.addEventListener('click', async () => {
+        titleEl.textContent = movie.title;
+        overviewEl.textContent = movie.overview || 'No overview available.';
+        dateEl.textContent = movie.release_date || 'Unknown';
+        ratingEl.textContent = movie.vote_average || 'N/A';
+        genresEl.textContent = movie.genre_ids.map(id => genres[id]).join(', ') || '—';
+
+        // Set backdrop image as background
+        if (movie.backdrop_path) {
+          backdropEl.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`;
         } else {
-          upcomingTrailerLink.href = '#';
-          upcomingTrailerLink.classList.add('disabled');
+          backdropEl.style.backgroundImage = 'url(https://via.placeholder.com/500x300?text=No+Backdrop)';
         }
-      })
-      .catch(error => {
-        console.error('Error fetching trailer:', error);
-        upcomingTrailerLink.href = '#';
-        upcomingTrailerLink.classList.add('disabled');
+
+        // Set trailer link
+        const trailer = await fetchTrailer(movie.id);
+        if (trailer) {
+          trailerBtn.href = trailer;
+          trailerBtn.style.display = 'inline-block';
+          trailerBtn.classList.remove('disabled', 'd-none');
+        } else {
+          trailerBtn.href = '#';
+          trailerBtn.style.display = 'none';
+          trailerBtn.classList.add('disabled');
+        }
+
+        // Set comment link
+        if (commentLink) {
+          commentLink.href = `./comment.html?id=${movie.id}&type=movie`;
+          commentLink.classList.remove("d-none");
+        }
+
+        modal.show();
       });
 
-    upcomingModal.show();
+      container.appendChild(card);
+    });
   }
 
   fetchUpcomingMovies();
-});
+})();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -346,8 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const tvContainer = document.getElementById('tv-container');
 const tvModal = new bootstrap.Modal(document.getElementById('tvModal'));
 const tvTrailerButton = document.getElementById('tvTrailerButton');
-const tvBackdrop = document.getElementById('tvBackdrop');
-const readMoreBtn = document.getElementById('tvReadMoreBtn');
+const tvBackdropWrapper = document.getElementById('tvBackdropWrapper');
 const newlink1 = document.getElementById('comets1'); 
 
 async function fetchTrendingTVShows() {
@@ -364,7 +284,9 @@ async function fetchTrendingTVShows() {
       card.style.cursor = 'pointer';
 
       const img = document.createElement('img');
-      img.src = `https://image.tmdb.org/t/p/w500${show.poster_path}`;
+      img.src = show.poster_path
+        ? `https://image.tmdb.org/t/p/w500${show.poster_path}`
+        : 'https://via.placeholder.com/180x270?text=No+Image';
       img.alt = show.name;
       img.classList.add('img-fluid');
 
@@ -381,14 +303,16 @@ async function fetchTrendingTVShows() {
         document.getElementById('tvAirDate').textContent = show.first_air_date || 'N/A';
         document.getElementById('tvRating').textContent = show.vote_average ? `★ ${show.vote_average.toFixed(1)}` : 'N/A';
 
-        tvBackdrop.src = `https://image.tmdb.org/t/p/w780${show.backdrop_path}`;
-        tvBackdrop.alt = show.name;
+        // Set backdrop as background image on div
+        if (show.backdrop_path) {
+          tvBackdropWrapper.style.backgroundImage = `url(https://image.tmdb.org/t/p/w780${show.backdrop_path})`;
+        } else {
+          tvBackdropWrapper.style.backgroundImage = 'none';
+        }
 
-       
         newlink1.href = `./comment.html?id=${show.id}&type=tv`;
         newlink1.classList.remove("d-none");
 
-  
         tvTrailerButton.classList.add('d-none');
 
         try {
@@ -419,9 +343,107 @@ fetchTrendingTVShows();
 
 
 
+const topMovieContainer = document.getElementById('topmovie-container');
+const topTrendingModal = new bootstrap.Modal(document.getElementById('topTrendingModal'));
+const topTrendingModalTitle = document.getElementById('topTrendingModalTitle');
+const topTrendingModalGenres = document.getElementById('topTrendingModalGenres');
+const topTrendingModalDate = document.getElementById('topTrendingModalDate');
+const topTrendingModalRating = document.getElementById('topTrendingModalRating');
+const topTrendingModalOverview = document.getElementById('topTrendingModalOverview');
+const topTrendingTrailerBtn = document.getElementById('topTrendingTrailerBtn');
+const topBackdrop = document.getElementById('topTrendingBackdrop');
+const toplink = document.getElementById('comets4');
 
+async function fetchTopTrendingMovies() {
+  try {
+    const lastFetch = localStorage.getItem('lastTopTrendingFetch');
+    const now = new Date().getTime();
+    let movies;
 
+    if (!lastFetch || now - lastFetch > 86400000) {
+      const response = await fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${apiKey}`);
+      const data = await response.json();
+      movies = data.results;
+      localStorage.setItem('lastTopTrendingFetch', now);
+      localStorage.setItem('topTrendingMovies', JSON.stringify(movies));
+    } else {
+      movies = JSON.parse(localStorage.getItem('topTrendingMovies'));
+    }
 
+    topMovieContainer.innerHTML = '';
+
+    movies.forEach(movie => {
+      const card = document.createElement('div');
+      card.classList.add('tv-card'); // Reusing the same card class for consistency
+      card.style.cursor = 'pointer';
+
+      const img = document.createElement('img');
+      img.src = movie.poster_path
+        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+        : 'https://via.placeholder.com/180x270?text=No+Image';
+      img.alt = movie.title;
+      img.classList.add('img-fluid');
+
+      const title = document.createElement('h6');
+      title.textContent = movie.title;
+
+      card.appendChild(img);
+      card.appendChild(title);
+      topMovieContainer.appendChild(card);
+
+      card.addEventListener('click', () => showTopTrendingModal(movie.id));
+    });
+  } catch (error) {
+    console.error('Error fetching Top Trending Movies:', error);
+  }
+}
+
+async function showTopTrendingModal(movieId) {
+  try {
+    const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}`);
+    const movie = await response.json();
+
+    topTrendingModalTitle.textContent = movie.title;
+    topTrendingModalGenres.textContent = movie.genres.map(g => g.name).join(', ') || 'N/A';
+    topTrendingModalDate.textContent = movie.release_date || 'N/A';
+    topTrendingModalRating.textContent = movie.vote_average ? `★ ${movie.vote_average.toFixed(1)}` : 'N/A';
+    topTrendingModalOverview.textContent = movie.overview || 'No description available.';
+
+    // Set backdrop as background image in a div
+    topBackdrop.style.backgroundImage = movie.backdrop_path
+      ? `url('https://image.tmdb.org/t/p/w780${movie.backdrop_path}')`
+      : `url('https://via.placeholder.com/780x439?text=No+Image')`;
+
+    topBackdrop.style.backgroundSize = 'cover';
+    topBackdrop.style.backgroundPosition = 'center';
+
+    // Show comment link
+    toplink.href = `./comment.html?id=${movie.id}&type=movie`;
+    toplink.classList.remove("d-none");
+
+    // Hide trailer button first
+    topTrendingTrailerBtn.classList.add('d-none');
+
+    try {
+      const trailerRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}`);
+      const trailerData = await trailerRes.json();
+      const trailer = trailerData.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+
+      if (trailer) {
+        topTrendingTrailerBtn.href = `https://www.youtube.com/watch?v=${trailer.key}`;
+        topTrendingTrailerBtn.classList.remove('d-none');
+      }
+    } catch (trailerError) {
+      console.warn('No trailer found:', trailerError);
+    }
+
+    topTrendingModal.show();
+  } catch (error) {
+    console.error('Error loading movie details:', error);
+  }
+}
+
+fetchTopTrendingMovies();
 
 
 
@@ -503,48 +525,70 @@ fetchTrendingTVShows();
 
 
 
-const nollyMovieContainer = document.getElementById('nolly-movies');
+
+
+
+
+    const nollyMovieContainer = document.getElementById('nolly-movies');
 
 const nollyModal = new bootstrap.Modal(document.getElementById('nollyModal'));
-const nollyTitle = document.getElementById('nollyTitle');
+const nollyTitle = document.getElementById('nollyModalLabel');
 const nollyOverview = document.getElementById('nollyOverview');
 const nollyRating = document.getElementById('nollyRating');
 const nollyGenres = document.getElementById('nollyGenres');
 const nollyReleaseDate = document.getElementById('nollyReleaseDate');
 const nollyTrailerBtn = document.getElementById('nollyTrailerBtn');
-const nollylink = document.getElementById("cometsng");
-const nollyBackdrop = document.getElementById('nollyBackdrop');
-
-async function fetchNollyMovies() {
-  const url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_origin_country=NG&sort_by=popularity.desc`;
-  const res = await fetch(url);
-  const data = await res.json();
-  const movies = data.results;
-  displayNollyMovies(movies);
-}
+const nollylink = document.getElementById('cometsng');
+const nollyBackdropWrapper = document.getElementById('nollyBackdropWrapper');  // Updated here
 
 async function fetchNollyGenres() {
   const url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}`;
-  const res = await fetch(url);
-  const data = await res.json();
-  return data.genres.reduce((acc, genre) => {
-    acc[genre.id] = genre.name;
-    return acc;
-  }, {});
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    return data.genres.reduce((acc, genre) => {
+      acc[genre.id] = genre.name;
+      return acc;
+    }, {});
+  } catch (error) {
+    console.error('Error fetching genres:', error);
+    return {};
+  }
 }
 
 async function fetchNollyTrailer(movieId) {
   const url = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}`;
-  const res = await fetch(url);
-  const data = await res.json();
-  const trailer = data.results.find(
-    vid => vid.type === 'Trailer' && vid.site === 'YouTube'
-  );
-  return trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : null;
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    const trailer = data.results.find(
+      vid => vid.type === 'Trailer' && vid.site === 'YouTube'
+    );
+    return trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : null;
+  } catch (error) {
+    console.error('Error fetching trailer:', error);
+    return null;
+  }
+}
+
+async function fetchNollyMovies() {
+  const url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_origin_country=NG&sort_by=popularity.desc`;
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    if (!data.results || data.results.length === 0) {
+      console.warn('No Nigerian movies found.');
+      return;
+    }
+    displayNollyMovies(data.results);
+  } catch (error) {
+    console.error('Error fetching Nigerian movies:', error);
+  }
 }
 
 async function displayNollyMovies(movies) {
   const genreMap = await fetchNollyGenres();
+  nollyMovieContainer.innerHTML = ''; // Clear container before adding new cards
 
   movies.forEach(movie => {
     const card = document.createElement('div');
@@ -554,6 +598,7 @@ async function displayNollyMovies(movies) {
     img.src = movie.poster_path
       ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
       : 'https://via.placeholder.com/180x270?text=No+Image';
+    img.alt = movie.title;
     card.appendChild(img);
 
     const title = document.createElement('p');
@@ -561,16 +606,23 @@ async function displayNollyMovies(movies) {
     title.textContent = movie.title;
     card.appendChild(title);
 
+    card.style.cursor = 'pointer';
+
     card.addEventListener('click', async () => {
       nollyTitle.textContent = movie.title;
       nollyOverview.textContent = movie.overview || 'No overview available.';
-      nollyRating.textContent = movie.vote_average || 'N/A';
+      nollyRating.textContent = movie.vote_average ?? 'N/A';
       nollyReleaseDate.textContent = movie.release_date || 'Unknown';
-      nollyGenres.textContent = movie.genre_ids.map(id => genreMap[id]).join(', ') || 'Unknown';
+      nollyGenres.textContent = movie.genre_ids.length
+        ? movie.genre_ids.map(id => genreMap[id] || 'Unknown').join(', ')
+        : 'Unknown';
 
-      nollyBackdrop.src = movie.backdrop_path
-        ? `https://image.tmdb.org/t/p/w780${movie.backdrop_path}`
-        : 'https://via.placeholder.com/780x250?text=No+Backdrop';
+      // Set backdrop as background image on the wrapper div:
+      if (movie.backdrop_path) {
+        nollyBackdropWrapper.style.backgroundImage = `url(https://image.tmdb.org/t/p/w780${movie.backdrop_path})`;
+      } else {
+        nollyBackdropWrapper.style.backgroundImage = 'url(https://via.placeholder.com/780x250?text=No+Backdrop)';
+      }
 
       const trailerLink = await fetchNollyTrailer(movie.id);
       if (trailerLink) {
@@ -578,11 +630,11 @@ async function displayNollyMovies(movies) {
         nollyTrailerBtn.style.display = 'inline-block';
       } else {
         nollyTrailerBtn.style.display = 'none';
+        nollyTrailerBtn.href = '#';
       }
 
-      
       nollylink.href = `./comment.html?id=${movie.id}&type=movie`;
-      nollylink.classList.remove("d-none");
+      nollylink.classList.remove('d-none');
 
       nollyModal.show();
     });
@@ -597,32 +649,19 @@ fetchNollyMovies();
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 (() => {
-  const kdramaApiKey = '2e249fd25cbc54d05736ba7a92ab8e16'; 
+  const kdramaApiKey = '2e249fd25cbc54d05736ba7a92ab8e16';
 
   const kdramaContainer = document.getElementById('kdrama-container');
 
   const kdramaModal = new bootstrap.Modal(document.getElementById('kdramaModal'));
-  const kdramaTitle = document.getElementById('kdramaTitle');
+  const kdramaTitle = document.getElementById('kdramaModalLabel');      // updated here
   const kdramaOverview = document.getElementById('kdramaOverview');
   const kdramaRating = document.getElementById('kdramaRating');
   const kdramaGenres = document.getElementById('kdramaGenres');
   const kdramaFirstAirDate = document.getElementById('kdramaFirstAirDate');
   const kdramaTrailerBtn = document.getElementById('kdramaTrailerBtn');
-  const kdramaBackdrop = document.getElementById('kdramaBackdrop');
+  const kdramaBackdropWrapper = document.getElementById('kdramaBackdropWrapper');
   const kdlink = document.getElementById("cometskd");
 
   async function fetchKdramas() {
@@ -632,7 +671,6 @@ fetchNollyMovies();
     displayKdramas(data.results);
   }
 
-  // Fetch TV genres
   async function fetchKdramaGenres() {
     const url = `https://api.themoviedb.org/3/genre/tv/list?api_key=${kdramaApiKey}`;
     const res = await fetch(url);
@@ -671,16 +709,22 @@ fetchNollyMovies();
       title.textContent = show.name;
       card.appendChild(title);
 
+      card.style.cursor = 'pointer';
+
       card.addEventListener('click', async () => {
         kdramaTitle.textContent = show.name;
         kdramaOverview.textContent = show.overview || 'No overview available.';
-        kdramaRating.textContent = show.vote_average || 'N/A';
+        kdramaRating.textContent = show.vote_average ?? 'N/A';
         kdramaFirstAirDate.textContent = show.first_air_date || 'Unknown';
-        kdramaGenres.textContent = show.genre_ids.map(id => genreMap[id]).join(', ') || 'Unknown';
+        kdramaGenres.textContent = show.genre_ids.length
+          ? show.genre_ids.map(id => genreMap[id] || 'Unknown').join(', ')
+          : 'Unknown';
 
-        kdramaBackdrop.src = show.backdrop_path
-          ? `https://image.tmdb.org/t/p/w780${show.backdrop_path}`
-          : 'https://via.placeholder.com/780x250?text=No+Backdrop';
+        if (show.backdrop_path) {
+          kdramaBackdropWrapper.style.backgroundImage = `url(https://image.tmdb.org/t/p/w780${show.backdrop_path})`;
+        } else {
+          kdramaBackdropWrapper.style.backgroundImage = 'url(https://via.placeholder.com/780x250?text=No+Backdrop)';
+        }
 
         const trailerLink = await fetchKdramaTrailer(show.id);
         if (trailerLink) {
@@ -688,9 +732,9 @@ fetchNollyMovies();
           kdramaTrailerBtn.style.display = 'inline-block';
         } else {
           kdramaTrailerBtn.style.display = 'none';
+          kdramaTrailerBtn.href = '#';
         }
 
-      
         kdlink.href = `./comment.html?id=${show.id}&type=tv`;
         kdlink.classList.remove("d-none");
 
@@ -706,19 +750,27 @@ fetchNollyMovies();
 
 
 
+
+
+
+
+
+
 (() => {
   const teenApiKey = '2e249fd25cbc54d05736ba7a92ab8e16';
 
   const teenContainer = document.getElementById('teen-container');
   const teenModal = new bootstrap.Modal(document.getElementById('teenModal'));
-  const teenTitle = document.getElementById('teenTitle');
+
+  // Updated element IDs to match the new modal layout
+  const teenTitle = document.getElementById('teenModalLabel');
   const teenOverview = document.getElementById('teenOverview');
   const teenRating = document.getElementById('teenRating');
   const teenGenres = document.getElementById('teenGenres');
   const teenFirstAirDate = document.getElementById('teenFirstAirDate');
   const teenTrailerBtn = document.getElementById('teenTrailerBtn');
-  const teenBackdrop = document.getElementById('teenBackdrop');
-  const teenlink = document.getElementById('cometteen'); // element, keep as is
+  const teenBackdropWrapper = document.getElementById('teenBackdropWrapper');
+  const teenlink = document.getElementById('cometteen');
 
   async function fetchTeenSeries() {
     try {
@@ -792,9 +844,12 @@ fetchNollyMovies();
         teenFirstAirDate.textContent = show.first_air_date || 'Unknown';
         teenGenres.textContent = show.genre_ids.map(id => genreMap[id]).join(', ') || 'Unknown';
 
-        teenBackdrop.src = show.backdrop_path
-          ? `https://image.tmdb.org/t/p/w780${show.backdrop_path}`
-          : 'https://via.placeholder.com/780x250?text=No+Backdrop';
+        // Set backdrop as background image
+        if (show.backdrop_path) {
+          teenBackdropWrapper.style.backgroundImage = `url(https://image.tmdb.org/t/p/w780${show.backdrop_path})`;
+        } else {
+          teenBackdropWrapper.style.backgroundImage = 'none';
+        }
 
         const trailerLink = await fetchTeenTrailer(show.id);
         if (trailerLink) {
@@ -821,17 +876,19 @@ fetchNollyMovies();
 
 
 
+
 (() => {
   const apiKey = '2e249fd25cbc54d05736ba7a92ab8e16';
   const container = document.getElementById('adultteen-container');
   const modal = new bootstrap.Modal(document.getElementById('adultteenModal'));
-  const titleEl = document.getElementById('adultteenTitle');
+
+  const titleEl = document.getElementById('adultteenModalLabel');
   const overviewEl = document.getElementById('adultteenOverview');
   const ratingEl = document.getElementById('adultteenRating');
   const genresEl = document.getElementById('adultteenGenres');
   const dateEl = document.getElementById('adultteenFirstAirDate');
   const trailerBtn = document.getElementById('adultteenTrailerBtn');
-  const backdropEl = document.getElementById('adultteenBackdrop');
+  const backdropWrapper = document.getElementById('adultteenBackdropWrapper');
   const adultlink = document.getElementById("cometateen");
 
   async function fetchAdultTeen() {
@@ -893,18 +950,21 @@ fetchNollyMovies();
 
       card.addEventListener('click', async () => {
         titleEl.textContent = show.name;
-        overviewEl.textContent = show.overview;
-        ratingEl.textContent = show.vote_average;
-        dateEl.textContent = show.first_air_date;
+        overviewEl.textContent = show.overview || 'No overview available.';
+        ratingEl.textContent = show.vote_average || 'N/A';
+        dateEl.textContent = show.first_air_date || 'Unknown';
         genresEl.textContent = show.genre_ids.map(id => genres[id]).join(', ') || '—';
-        backdropEl.src = show.backdrop_path
-          ? `https://image.tmdb.org/t/p/w780${show.backdrop_path}`
-          : 'https://via.placeholder.com/780x250?text=No+Backdrop';
+
+        if (show.backdrop_path) {
+          backdropWrapper.style.backgroundImage = `url(https://image.tmdb.org/t/p/w780${show.backdrop_path})`;
+        } else {
+          backdropWrapper.style.backgroundImage = 'none';
+        }
 
         const tr = await fetchTrailer(show.id);
         if (tr) {
           trailerBtn.href = tr;
-          trailerBtn.style.display = '';
+          trailerBtn.style.display = 'inline-block';
         } else {
           trailerBtn.style.display = 'none';
         }
@@ -925,52 +985,85 @@ fetchNollyMovies();
 })();
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 (() => {
   const KEY = '2e249fd25cbc54d05736ba7a92ab8e16';
   const container = document.getElementById('sitcom-container');
   const modal = new bootstrap.Modal(document.getElementById('sitcomModal'));
 
-  const titleEl = document.getElementById('sitcomTitle');
+  const titleEl = document.getElementById('sitcomModalLabel');
   const overviewEl = document.getElementById('sitcomOverview');
   const ratingEl = document.getElementById('sitcomRating');
   const genresEl = document.getElementById('sitcomGenres');
   const dateEl = document.getElementById('sitcomFirstAirDate');
   const trailerBtn = document.getElementById('sitcomTrailerBtn');
-  const backImg = document.getElementById('sitcomBackdrop');
+  const backdropWrapper = document.getElementById('sitcomBackdropWrapper');
   const sitlink = document.getElementById("cometssit");
 
   async function fetchGenres() {
     const res = await fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${KEY}`);
     const { genres } = await res.json();
-    return genres.reduce((m, g) => (m[g.id] = g.name, m), {});
+    return genres.reduce((map, genre) => {
+      map[genre.id] = genre.name;
+      return map;
+    }, {});
   }
 
   async function fetchTrailer(id) {
     const res = await fetch(`https://api.themoviedb.org/3/tv/${id}/videos?api_key=${KEY}`);
     const { results } = await res.json();
-    const vid = results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-    return vid ? `https://www.youtube.com/watch?v=${vid.key}` : null;
+    const video = results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+    return video ? `https://www.youtube.com/watch?v=${video.key}` : null;
   }
 
   async function fetchSitcoms() {
     const url = `https://api.themoviedb.org/3/discover/tv?api_key=${KEY}` +
                 `&with_genres=35&with_origin_country=US&sort_by=popularity.desc&language=en-US`;
-    const [genreMap, res] = await Promise.all([fetchGenres(), fetch(url).then(r => r.json())]);
+    
+    const [genreMap, res] = await Promise.all([
+      fetchGenres(),
+      fetch(url).then(r => r.json())
+    ]);
+
     if (!res.results?.length) return console.warn('No sitcoms found.');
 
     res.results.slice(0, 30).forEach(show => {
       const card = document.createElement('div');
       card.className = 'sitcom-card';
-      card.innerHTML = `<img src="${show.poster_path ? `https://image.tmdb.org/t/p/w500${show.poster_path}` : 
-            'https://via.placeholder.com/180x270?text=No+Image'}"><p class="sitcom-title">${show.name}</p>`;
+      card.innerHTML = `
+        <img src="${show.poster_path ? `https://image.tmdb.org/t/p/w500${show.poster_path}` : 
+        'https://via.placeholder.com/180x270?text=No+Image'}">
+        <p class="sitcom-title">${show.name}</p>`;
 
       card.addEventListener('click', async () => {
         titleEl.textContent = show.name;
-        overviewEl.textContent = show.overview;
-        ratingEl.textContent = show.vote_average;
-        dateEl.textContent = show.first_air_date;
+        overviewEl.textContent = show.overview || 'No overview available.';
+        ratingEl.textContent = show.vote_average || '—';
+        dateEl.textContent = show.first_air_date || '—';
         genresEl.textContent = show.genre_ids.map(id => genreMap[id]).join(', ') || '—';
-        backImg.src = show.backdrop_path ? `https://image.tmdb.org/t/p/w780${show.backdrop_path}` : '';
+
+        // Use background image in the new modal layout
+        if (show.backdrop_path) {
+          backdropWrapper.style.backgroundImage = `url(https://image.tmdb.org/t/p/w780${show.backdrop_path})`;
+        } else {
+          backdropWrapper.style.backgroundImage = 'none';
+        }
 
         const trailer = await fetchTrailer(show.id);
         if (trailer) {
@@ -997,9 +1090,108 @@ fetchNollyMovies();
 
 
 
+(() => {
+  const nickApiKey = '2e249fd25cbc54d05736ba7a92ab8e16';
 
+  const nickContainer = document.getElementById('nickelodeon-container');
+  const nickModal = new bootstrap.Modal(document.getElementById('nickModal'));
 
+  const nickTitle = document.getElementById('nickModalLabel');
+  const nickOverview = document.getElementById('nickOverview');
+  const nickRating = document.getElementById('nickRating');
+  const nickGenres = document.getElementById('nickGenres');
+  const nickFirstAirDate = document.getElementById('nickFirstAirDate');
+  const nickTrailerBtn = document.getElementById('nickTrailerBtn');
+  const nickBackdropWrapper = document.getElementById('nickBackdropWrapper');
+  const nickLink = document.getElementById('cometsnick');
 
+  async function fetchNickShows() {
+    const url = `https://api.themoviedb.org/3/discover/tv?api_key=${nickApiKey}&with_networks=13&sort_by=popularity.desc`;
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      displayNickShows(data.results);
+    } catch (err) {
+      console.error('Error fetching Nickelodeon shows:', err);
+    }
+  }
+
+  async function fetchNickGenres() {
+    const url = `https://api.themoviedb.org/3/genre/tv/list?api_key=${nickApiKey}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data.genres.reduce((acc, genre) => {
+      acc[genre.id] = genre.name;
+      return acc;
+    }, {});
+  }
+
+  async function fetchNickTrailer(tvId) {
+    const url = `https://api.themoviedb.org/3/tv/${tvId}/videos?api_key=${nickApiKey}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const trailer = data.results.find(
+      vid => vid.type === 'Trailer' && vid.site === 'YouTube'
+    );
+    return trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : null;
+  }
+
+  async function displayNickShows(shows) {
+    const genreMap = await fetchNickGenres();
+
+    shows.forEach(show => {
+      const card = document.createElement('div');
+      card.classList.add('nick-card');
+
+      const img = document.createElement('img');
+      img.src = show.poster_path
+        ? `https://image.tmdb.org/t/p/w500${show.poster_path}`
+        : 'https://via.placeholder.com/180x270?text=No+Image';
+      card.appendChild(img);
+
+      const title = document.createElement('p');
+      title.className = 'nick-title';
+      title.textContent = show.name;
+      card.appendChild(title);
+
+      card.style.cursor = 'pointer';
+
+      card.addEventListener('click', async () => {
+        nickTitle.textContent = show.name;
+        nickOverview.textContent = show.overview || 'No overview available.';
+        nickRating.textContent = show.vote_average ?? 'N/A';
+        nickFirstAirDate.textContent = show.first_air_date || 'Unknown';
+        nickGenres.textContent = show.genre_ids.length
+          ? show.genre_ids.map(id => genreMap[id] || 'Unknown').join(', ')
+          : 'Unknown';
+
+        if (show.backdrop_path) {
+          nickBackdropWrapper.style.backgroundImage = `url(https://image.tmdb.org/t/p/w780${show.backdrop_path})`;
+        } else {
+          nickBackdropWrapper.style.backgroundImage = 'url(https://via.placeholder.com/780x250?text=No+Backdrop)';
+        }
+
+        const trailerLink = await fetchNickTrailer(show.id);
+        if (trailerLink) {
+          nickTrailerBtn.href = trailerLink;
+          nickTrailerBtn.style.display = 'inline-block';
+        } else {
+          nickTrailerBtn.style.display = 'none';
+          nickTrailerBtn.href = '#';
+        }
+
+        nickLink.href = `./comment.html?id=${show.id}&type=tv`;
+        nickLink.classList.remove("d-none");
+
+        nickModal.show();
+      });
+
+      nickContainer.appendChild(card);
+    });
+  }
+
+  fetchNickShows();
+})();
 
 
 
